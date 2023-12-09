@@ -1,0 +1,363 @@
+openapi: 3.0.0
+info:
+  title: Cloud Storage API
+  description: API for cloud storage
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/JCASCOSE/CloudStorage/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /api/cloud-storage/video:
+    post:
+      tags:
+      - video
+      summary: Upload a stream to be saved as a video
+      operationId: cloud-storage-upload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Streaming'
+        required: true
+      responses:
+        "201":
+          description: Video uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        "400":
+          description: Error in upload request
+        "401":
+          description: Unauthorized - user not logged in
+      x-swagger-router-controller: Video
+  /api/cloud-storage/video/{videoId}:
+    put:
+      tags:
+      - video
+      summary: Configure video
+      operationId: cloud-storage-update
+      parameters:
+      - name: videoId
+        in: path
+        description: video to modify
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 1
+      - name: title
+        in: query
+        description: title to modify
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: New title
+      - name: description
+        in: query
+        description: description to modify
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: New description
+      responses:
+        "200":
+          description: Video configuration updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        "401":
+          description: Unauthorized - user not logged in
+        "404":
+          description: Video not found
+      x-swagger-router-controller: Video
+    delete:
+      tags:
+      - video
+      summary: Delete video
+      operationId: cloud-storage-delete
+      parameters:
+      - name: videoId
+        in: path
+        description: video to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 1
+      responses:
+        "204":
+          description: Video deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse'
+        "401":
+          description: Unauthorized - user not logged in
+        "404":
+          description: Video not found
+      x-swagger-router-controller: Video
+  /api/cloud-storage/video/{videoId}/play:
+    get:
+      tags:
+      - video
+      summary: Play video
+      operationId: cloud-storage-play
+      parameters:
+      - name: videoId
+        in: path
+        description: video to play
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 1
+      responses:
+        "200":
+          description: Video started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        "401":
+          description: Unauthorized - user not logged in
+        "404":
+          description: Video not found
+      x-swagger-router-controller: Video
+  /api/cloud-storage/video/{videoId}/stop:
+    post:
+      tags:
+      - video
+      summary: Stop video
+      operationId: cloud-storage-stop
+      parameters:
+      - name: videoId
+        in: path
+        description: video to stop
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 1
+      responses:
+        "200":
+          description: Video stopped successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "401":
+          description: Unauthorized - user not logged in
+        "404":
+          description: Video not found
+      x-swagger-router-controller: Video
+  /api/cloud-storage/video/{videoId}/resume:
+    post:
+      tags:
+      - video
+      summary: Resume video
+      operationId: cloud-storage-resume
+      parameters:
+      - name: videoId
+        in: path
+        description: video to resume
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 1
+      - name: time
+        in: query
+        description: time to resume in milliseconds
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 5681
+      responses:
+        "200":
+          description: Video resumed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        "401":
+          description: Unauthorized - user not logged in
+        "404":
+          description: Video not found
+      x-swagger-router-controller: Video
+  /api/cloud-storage/video/search/{title}:
+    get:
+      tags:
+      - video
+      summary: Index and retrieve video
+      operationId: cloud-storage-search
+      parameters:
+      - name: title
+        in: path
+        description: video to index
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: Expo2023
+      responses:
+        "200":
+          description: Query returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        "400":
+          description: Error in search query
+        "401":
+          description: Unauthorized - user not logged in
+      x-swagger-router-controller: Video
+  /api/cloud-storage/video/{videoId}/parameters:
+    put:
+      tags:
+      - video
+      summary: Save video parameters
+      operationId: cloud-storage-save-parameters
+      parameters:
+      - name: videoId
+        in: path
+        description: video to save
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 1
+      - name: quality
+        in: query
+        description: quality of the video
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+        example: 1080
+      - name: speed
+        in: query
+        description: speed of the video
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: number
+        example: 1.5
+      responses:
+        "200":
+          description: Parameters saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        "401":
+          description: Unauthorized - user not logged in
+        "404":
+          description: Video not found
+      x-swagger-router-controller: Video
+components:
+  schemas:
+    User:
+      required:
+      - email
+      - password
+      - userId
+      - username
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "1"
+        username:
+          type: string
+          example: frederick62
+        email:
+          type: string
+          format: email
+          example: fred@email.com
+        recoveryEmail:
+          type: string
+          format: email
+          example: rick@email.com
+        password:
+          type: string
+          format: password
+          example: "1234"
+    Streaming:
+      required:
+      - owner
+      - streamingId
+      - title
+      type: object
+      properties:
+        streamId:
+          type: string
+          example: "1"
+        title:
+          type: string
+          example: First stream
+        description:
+          type: string
+          example: Doing my first stream
+        owner:
+          type: string
+          example: "1"
+    Video:
+      required:
+      - owner
+      - title
+      - videoId
+      type: object
+      properties:
+        videoId:
+          type: string
+          example: "1"
+        title:
+          type: string
+          example: Hello world
+        description:
+          type: string
+          example: First video
+        owner:
+          type: string
+          example: "1"
+      example:
+        owner: "1"
+        description: First video
+        videoId: "1"
+        title: Hello world
+    APIResponse:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          example: Operation returned successfully
+      example:
+        message: Operation returned successfully
+    inline_response_200:
+      allOf:
+      - $ref: '#/components/schemas/Video'
+      - type: object
+        properties:
+          time:
+            type: string
+            description: The time parameter in milliseconds
+            example: "2510"
