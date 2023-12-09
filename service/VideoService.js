@@ -11,7 +11,7 @@ exports.cloudStorageDelete = function(videoId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-      "message": "Video deleted succesfully"
+      "message": "Video deleted succesfully!"
     };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
